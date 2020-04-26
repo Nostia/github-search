@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Typography, AppBar, Toolbar, IconButton } from "@material-ui/core";
+import { Typography, AppBar, Toolbar } from "@material-ui/core";
+
 
 export default function Header(props) {
   return (

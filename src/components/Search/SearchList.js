@@ -4,7 +4,9 @@ import Pagination from "@material-ui/lab/Pagination";
 import Typography from "@material-ui/core/Typography";
 
 export default function SearchList(props) {
-  const listItems = props.list.map((i) => <div key={i.id}>{i.title}</div>);
+  const listItems = props.list
+    ? props.list.map((i) => <div key={i.id}>{i.name}</div>)
+    : ""; //;
   return (
     <div>
       <Typography variant="h6" component="h2">
