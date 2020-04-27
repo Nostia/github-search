@@ -26,11 +26,14 @@ function* search(action) {
     const page = yield select(getCurrentPage);
     yield delay(2000);
     let searchResult = yield call(searchRepositories, query, page);
-    var parsed = parse(searchResult.headers.link);
+    const parsed = parse(searchResult.headers.link);
+
     yield put({
       type: SEARCH_SUCCESS,
       searchResult: searchResult.data.items,
-      links: parsed,
+      totalPages: parsed.last
+        ? Number(parsed.last.page)
+        : Number(parsed.prev.page) + 1,
     });
   } catch (err) {
     console.log(err);

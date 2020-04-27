@@ -16,7 +16,6 @@ const initialState = {
   totalPages: 1,
 };
 
-const ITEMS_PER_PAGE = 30;
 const search = (state = initialState, action) => {
   console.log(action);
   switch (action.type) {
@@ -35,7 +34,7 @@ const search = (state = initialState, action) => {
         ...state,
         searchResult: action.searchResult,
         searchInProgress: false,
-        totalPages: action.links.last.page,
+        totalPages: action.totalPages,
       };
     case SEARCH_FAIL:
       return {
@@ -79,4 +78,3 @@ export const getCurrentPage = (state) => {
 export const getTotalPages = (state) => {
   return Number(state.search.totalPages);
 };
-
