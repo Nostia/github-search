@@ -7,11 +7,14 @@ import {
   SEARCH_REQUEST,
   UPDATE_SEARCH_QUERY,
   CANCEL_SEARCH_REQUEST,
+  SET_CURRENT_PAGE,
 } from "./SearchActions";
 import {
   getSearchQuery,
   getSearchResult,
   getSearchInProgress,
+  getTotalPages,
+  getCurrentPage,
 } from "./SearchReducer";
 
 import "./Search.scss";
@@ -24,6 +27,7 @@ class Search extends React.Component {
 
   searchRepositories = (e) => {
     e.preventDefault();
+    this.props.setCurrentPage(1);
     this.props.searchRepositories();
   };
 
@@ -33,6 +37,11 @@ class Search extends React.Component {
 
   cancelSearch = (e) => {
     this.props.cancelSearch();
+  };
+
+  handlePageChange = (e, v) => {
+    this.props.setCurrentPage(v);
+    this.props.searchRepositories();
   };
 
   render() {
@@ -45,7 +54,12 @@ class Search extends React.Component {
           searchQuery={this.props.searchQuery}
           isSearchInProgress={this.props.isSearchInProgress}
         ></SearchForm>
-        <SearchList list={this.props.searchResult}></SearchList>
+        <SearchList
+          list={this.props.searchResult}
+          totalPages={this.props.totalPages}
+          currentPage={this.props.currentPage}
+          handlePageChange={this.handlePageChange}
+        ></SearchList>
       </div>
     );
   }
@@ -56,6 +70,8 @@ const mapStateToProps = (state) => {
     searchQuery: getSearchQuery(state),
     searchResult: getSearchResult(state),
     isSearchInProgress: getSearchInProgress(state),
+    totalPages: getTotalPages(state),
+    currentPage: getCurrentPage(state),
   };
 };
 
@@ -65,6 +81,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: UPDATE_SEARCH_QUERY, query }),
     searchRepositories: () => dispatch({ type: SEARCH_REQUEST }),
     cancelSearch: () => dispatch({ type: CANCEL_SEARCH_REQUEST }),
+    setCurrentPage: (page) => dispatch({ type: SET_CURRENT_PAGE, page }),
   };
 };
 

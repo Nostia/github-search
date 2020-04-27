@@ -14,7 +14,11 @@ export default function SearchList(props) {
       </Typography>
 
       {listItems}
-      <Pagination count={3} />
+      <Pagination
+        count={props.totalPages}
+        page={props.currentPage}
+        onChange={props.handlePageChange}
+      />
     </div>
   );
 }
