@@ -11,29 +11,52 @@ import {
 } from "redux-saga/effects";
 import {
   SEARCH_SUCCESS,
-  // SEARCH_FAIL,
+  CACHE_SEARCH_RESPONSE,
   SEARCH_REQUEST,
   CANCEL_SEARCH_REQUEST,
   SEARCH_CANCELLED,
 } from "./SearchActions";
 import { searchRepositories } from "./SearchApi";
-import { getSearchQuery, getCurrentPage } from "./SearchReducer";
+import {
+  getSearchQuery,
+  getCurrentPage,
+  getCachedResult,
+} from "./SearchReducer";
 let parse = require("parse-link-header");
+
+function parseLinkHeader(link) {
+  const parsed = parse(link);
+  return !parsed
+    ? 1
+    : parsed.last
+    ? Number(parsed.last.page)
+    : Number(parsed.prev.page) + 1;
+}
 
 function* search(action) {
   try {
     const query = yield select(getSearchQuery);
     const page = yield select(getCurrentPage);
-    yield delay(2000);
-    let searchResult = yield call(searchRepositories, query, page);
-    const parsed = parse(searchResult.headers.link);
+    let cached = yield select(getCachedResult, query, page);
+
+    if (!cached || !cached.searchResult) {
+      yield delay(2000);
+      let searchResult = yield call(searchRepositories, query, page);
+      let totalPages = parseLinkHeader(searchResult.headers.link);
+      yield put({
+        type: CACHE_SEARCH_RESPONSE,
+        query,
+        page,
+        searchResult: searchResult.data.items,
+        totalPages,
+      });
+      cached = yield select(getCachedResult, query, page);
+    }
 
     yield put({
       type: SEARCH_SUCCESS,
-      searchResult: searchResult.data.items,
-      totalPages: parsed.last
-        ? Number(parsed.last.page)
-        : Number(parsed.prev.page) + 1,
+      searchResult: cached.searchResult,
+      totalPages: cached.totalPages,
     });
   } catch (err) {
     console.log(err);

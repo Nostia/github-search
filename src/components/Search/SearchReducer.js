@@ -5,11 +5,12 @@ import {
   SET_CURRENT_PAGE,
   SEARCH_FAIL,
   SEARCH_CANCELLED,
+  CACHE_SEARCH_RESPONSE,
 } from "./SearchActions";
 
 const initialState = {
   query: "",
-  cache: null,
+  cache: {},
   searchInProgress: false,
   searchResult: null,
   currentPage: 1,
@@ -53,6 +54,19 @@ const search = (state = initialState, action) => {
         ...state,
         currentPage: action.page,
       };
+    case CACHE_SEARCH_RESPONSE: {
+      return {
+        ...state,
+        cache: {
+          ...state.cache,
+          [action.query]: {
+            ...(state.cache[action.query] || {}),
+            [action.page]: action.searchResult,
+            totalPages: action.totalPages,
+          },
+        },
+      };
+    }
     default:
       return state;
   }
@@ -77,4 +91,15 @@ export const getCurrentPage = (state) => {
 
 export const getTotalPages = (state) => {
   return Number(state.search.totalPages);
+};
+
+export const getCachedResult = (state, query, page) => {
+  try {
+    return {
+      searchResult: state.search.cache[query][page],
+      totalPages: state.search.cache[query].totalPages,
+    };
+  } catch (err) {
+    return null;
+  }
 };
