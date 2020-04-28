@@ -5,6 +5,10 @@
 .search-form {
   margin: 10px;
   width: 50%;
+  height: 36px;
+  > * {
+    margin-right: 5px;
+  }
 }
 
 .search-item {

@@ -19,7 +19,6 @@ const initialState = {
 };
 
 const search = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case SEARCH_REQUEST:
       return {

@@ -40,6 +40,7 @@ function* search(action) {
     let cached = yield select(getCachedResult, query, page);
 
     if (!cached || !cached.searchResult) {
+      //for testing canceling request
       yield delay(2000);
       let searchResult = yield call(searchRepositories, query, page);
       let totalPages = parseLinkHeader(searchResult.headers.link);
@@ -49,7 +50,7 @@ function* search(action) {
         page,
         searchResult: searchResult.data.items,
         totalPages,
-        totalCount: searchResult.data.total_count
+        totalCount: searchResult.data.total_count,
       });
       cached = yield select(getCachedResult, query, page);
     }
@@ -58,7 +59,7 @@ function* search(action) {
       type: SEARCH_SUCCESS,
       searchResult: cached.searchResult,
       totalPages: cached.totalPages,
-      totalCount: cached.totalCount
+      totalCount: cached.totalCount,
     });
   } catch (err) {
     console.log(err);

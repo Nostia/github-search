@@ -1,7 +1,6 @@
 import React from "react";
 
-import Paper from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import Paper from "@material-ui/core/Paper";
 import Chip from "@material-ui/core/Chip";
 import { Typography } from "@material-ui/core";
 import StarIcon from "@material-ui/icons/Star";
