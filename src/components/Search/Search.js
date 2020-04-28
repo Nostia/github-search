@@ -15,6 +15,7 @@ import {
   getSearchInProgress,
   getTotalPages,
   getCurrentPage,
+  getTotalCount
 } from "./SearchReducer";
 
 import "./Search.scss";
@@ -57,6 +58,7 @@ class Search extends React.Component {
         <SearchList
           list={this.props.searchResult}
           totalPages={this.props.totalPages}
+          totalCount={this.props.totalCount}
           currentPage={this.props.currentPage}
           handlePageChange={this.handlePageChange}
         ></SearchList>
@@ -72,6 +74,7 @@ const mapStateToProps = (state) => {
     isSearchInProgress: getSearchInProgress(state),
     totalPages: getTotalPages(state),
     currentPage: getCurrentPage(state),
+    totalCount: getTotalCount(state)
   };
 };
 

@@ -15,6 +15,7 @@ const initialState = {
   searchResult: null,
   currentPage: 1,
   totalPages: 1,
+  totalCount: 0,
 };
 
 const search = (state = initialState, action) => {
@@ -36,6 +37,7 @@ const search = (state = initialState, action) => {
         searchResult: action.searchResult,
         searchInProgress: false,
         totalPages: action.totalPages,
+        totalCount: action.totalCount,
       };
     case SEARCH_FAIL:
       return {
@@ -63,6 +65,7 @@ const search = (state = initialState, action) => {
             ...(state.cache[action.query] || {}),
             [action.page]: action.searchResult,
             totalPages: action.totalPages,
+            totalCount: action.totalCount,
           },
         },
       };
@@ -93,11 +96,16 @@ export const getTotalPages = (state) => {
   return Number(state.search.totalPages);
 };
 
+export const getTotalCount = (state) => {
+  return Number(state.search.totalCount);
+};
+
 export const getCachedResult = (state, query, page) => {
   try {
     return {
       searchResult: state.search.cache[query][page],
       totalPages: state.search.cache[query].totalPages,
+      totalCount: state.search.cache[query].totalCount,
     };
   } catch (err) {
     return null;

@@ -49,6 +49,7 @@ function* search(action) {
         page,
         searchResult: searchResult.data.items,
         totalPages,
+        totalCount: searchResult.data.total_count
       });
       cached = yield select(getCachedResult, query, page);
     }
@@ -57,6 +58,7 @@ function* search(action) {
       type: SEARCH_SUCCESS,
       searchResult: cached.searchResult,
       totalPages: cached.totalPages,
+      totalCount: cached.totalCount
     });
   } catch (err) {
     console.log(err);
