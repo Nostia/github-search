@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 export default function SearchList(props) {
   const listItems = props.list
     ? props.list.map((i) => <SearchItem key={i.id} item={i} />)
-    : ""; //;
+    : "";
   return (
     <div>
       <Typography variant="h6" component="h2">

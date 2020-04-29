@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import SearchForm from "./SearchForm";
-import SearchList from "./SearchList";
+import SearchForm from "./components/SearchForm";
+import SearchList from "./components/SearchList";
 import {
   SEARCH_REQUEST,
   UPDATE_SEARCH_QUERY,
